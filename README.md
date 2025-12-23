@@ -1,6 +1,6 @@
 # Ray-Tracing
 
-This project implements a Ray-Tracing algorithm within the **Fragment Shader** stage of the standard graphics pipeline.
+This project implements a Ray-Tracing algorithm within the Fragment Shader stage of the standard graphics pipeline.
 
 <video src="https://github.com/user-attachments/assets/ea9d9bd6-7314-4e81-b158-2cb0a61582e3" width="400" controls><\video>
 
