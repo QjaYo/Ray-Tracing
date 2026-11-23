@@ -2,7 +2,20 @@
 
 This project implements a Ray-Tracing algorithm within the Fragment Shader stage of the standard graphics pipeline.
 
-<video src="https://github.com/user-attachments/assets/ea9d9bd6-7314-4e81-b158-2cb0a61582e3" width="400" controls><\video>
+<video src="https://github.com/user-attachments/assets/ea9d9bd6-7314-4e81-b158-2cb0a61582e3" width="400" controls></video>
+
+## Build and run
+
+The scene and OpenGL scaffolding come from the computer graphics course starter. The assignment implementation is in [fPhong.glsl](fPhong.glsl), which computes sphere intersections, shadow rays, and multiple reflections. This version also handles tangent rays and rays starting inside a sphere.
+
+Build with CMake 3.16 or newer and a C++11 compiler. On macOS the build uses the system OpenGL and GLUT frameworks. On Windows and Linux, install OpenGL, freeglut, and GLEW development packages. The shaders require desktop GLSL 3.30.
+
+```sh
+cmake -S . -B build
+cmake --build build --config Release
+```
+
+Run from the repository root so the program can load the four GLSL files and six cube-map textures. With a single-configuration generator, run `./build/RayTracing`. With Visual Studio, run `.\build\Release\RayTracing.exe`.
 
 ## Implementation Features
 
@@ -63,9 +76,9 @@ The intersection between a ray and a sphere is calculated using the following eq
 <br>
 <br>
 
-- 'Enter': Toggle Shading Mode
+- 'Enter' or 'Space': Toggle Shading Mode
 
-    - 0: Rasterizing Mode(Only Phong Shading)
+    - 0: Rasterizing Mode (Phong lighting and cube-map reflection)
     - 1: RayTracing Mode
 <img width="30%" alt="image" src="https://github.com/user-attachments/assets/f06c0c68-780c-4dfd-ad10-cd1abe93d77b" />
 <img width="30%" alt="image" src="https://github.com/user-attachments/assets/c8327953-e20f-4493-82a9-3f67711a129e" />
@@ -73,7 +86,7 @@ The intersection between a ray and a sphere is calculated using the following eq
 <br>
 <br>
 
-- 'R': Reset
+- 'R' or 'r': Generate a new sphere arrangement
 <img width="30%" alt="image" src="https://github.com/user-attachments/assets/fed4e46a-1e32-446d-90f9-7e87b345f1a5" />
 <img width="30%" alt="image" src="https://github.com/user-attachments/assets/0493903d-ba17-4b79-8a55-5a68bbdb0ef1" />
 

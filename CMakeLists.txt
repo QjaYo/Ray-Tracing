@@ -1,0 +1,20 @@
+cmake_minimum_required(VERSION 3.16)
+project(RayTracing LANGUAGES CXX)
+
+find_package(OpenGL REQUIRED)
+find_package(GLUT REQUIRED)
+add_executable(RayTracing main.cpp)
+target_compile_features(RayTracing PRIVATE cxx_std_11)
+target_include_directories(RayTracing PRIVATE include)
+target_link_libraries(RayTracing PRIVATE OpenGL::GL GLUT::GLUT)
+
+if(WIN32)
+    target_compile_definitions(RayTracing PRIVATE NOMINMAX _USE_MATH_DEFINES)
+endif()
+
+if(APPLE)
+    target_compile_definitions(RayTracing PRIVATE GL_SILENCE_DEPRECATION)
+else()
+    find_package(GLEW REQUIRED)
+    target_link_libraries(RayTracing PRIVATE GLEW::GLEW)
+endif()
