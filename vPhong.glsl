@@ -21,7 +21,7 @@ uniform vec4 uEPos;
 void main()
 {
 	gl_Position  = uProjMat*uViewMat*uModelMat*vPosition;
-	gl_Position *= vec4(1,1,-1,1);
+
    
 	vec4 N = uViewMat*uModelMat*vec4(vNormal,0); 
 	vec4 L = uViewMat*uLPos - uViewMat*uModelMat*vPosition; 

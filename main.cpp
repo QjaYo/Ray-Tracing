@@ -19,6 +19,7 @@
 
 MyCube cube;
 MySphere sphere;
+MySphere ground;
 
 GLuint program;
 GLuint phong_prog;
@@ -131,24 +132,6 @@ mat4 myOrtho(float l, float r, float b, float t, float zNear, float zFar)
 	return V;
 }
 
-mat4 myPerspective(float angle, float aspect, float zNear, float zFar)
-{
-	float rad = angle*3.141592/180.0f;
-	mat4 V(1.0f);
-	float h = 2*zFar*tan(rad/2);
-	float w = aspect*h;
-	mat4 S = Scale(2/w, 2/h, 1/zFar);
-
-	float c = -zNear/zFar;
-	
-	mat4 Mpt(1.0f);
-	Mpt[2] = vec4(0, 0, 1/(c+1), -c/(c+1));
-	Mpt[3] = vec4(0, 0, -1, 0);
-	
-	V = Mpt*S;
-	return V;
-}
-
 void myTextureInit()
 {
 	GLuint myTex;
@@ -190,6 +173,7 @@ void myInit()
 {
 	cube.Init();
 	sphere.Init(40,40);
+	ground.Init(128, 80, vec4(1), true);
 		
 	cube_prog = InitShader("vcube.glsl", "fcube.glsl");
 	phong_prog = InitShader("vPhong.glsl", "fPhong.glsl");
@@ -227,7 +211,7 @@ void display()
 	
 	mat4 ModelMat = Scale(1,1,1);
 	mat4 ViewMat = myLookAt(ePos, vec3(0,0,0), vec3(0,1,0));
-	mat4 ProjMat = myPerspective(45, g_aspect, 0.01, 100.0f);
+	mat4 ProjMat = Perspective(45, g_aspect, 0.1f, 100.0f);
 
 	drawCubeMap(ViewMat, ProjMat, ePos);
 
@@ -296,7 +280,7 @@ void display()
 		glUniform4f(uSpc, mSpc[0], mSpc[1], mSpc[2], mSpc[3]);
 		glUniform1f(uShininess, mShiny);
 
-		sphere.Draw(phong_prog);
+		(i == 0 ? ground : sphere).Draw(phong_prog);
 	}
 	
 	glutSwapBuffers();

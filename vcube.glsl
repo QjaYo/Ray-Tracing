@@ -17,7 +17,7 @@ uniform vec4 uEPos;
 
 void main()
 {	gl_Position  = uProjMat*uViewMat*uModelMat*vPosition;
-	gl_Position *= vec4(1,1,-1,1);
+
 
 	color = vColor;
 	pos = vPosition.xyz;

@@ -19,7 +19,7 @@ public:
 	int NumVertices;
 
 	MySphereVertex * Vertices;
-	GLuint Init(int la_slice, int lo_slice, vec4 color=vec4(0.5,0.5,0.5,1));
+	GLuint Init(int la_slice, int lo_slice, vec4 color=vec4(0.5,0.5,0.5,1), bool refineTop=false);
 	void SetPositionAndOtherAttributes(GLuint program);
 
 	GLuint vao;
@@ -44,7 +44,7 @@ MySphere::~MySphere(void)
 		delete [] Vertices;
 }
 
-GLuint MySphere::Init(int la_slice, int lo_slice, vec4 color)
+GLuint MySphere::Init(int la_slice, int lo_slice, vec4 color, bool refineTop)
 {
 	// The Cube should be initialized only once;
 	if(bInitialized == true) return vao;
@@ -52,20 +52,19 @@ GLuint MySphere::Init(int la_slice, int lo_slice, vec4 color)
 	NumVertices = (la_slice-2)*lo_slice*2*3 + 2*lo_slice*3;
 	Vertices = new MySphereVertex [NumVertices];
 
-	float da = 3.141592/la_slice;
-	float db = 3.141592*2.0/lo_slice;
+	const float pi = 3.14159265f;
+	const float db = 2.0f * pi / lo_slice;
+	auto latitude = [=](int ring) {
+		float t = static_cast<float>(ring) / la_slice;
+		// The visible part of the ground sphere is close to its north pole.
+		return (refineTop ? t * t * t : t) * pi;
+	};
 	int cur = 0;
-	for(int j=0; j<lo_slice; j++)
-	{
-		float y2 = cos(da);
-		float r2 = sqrt(1-y2*y2);
-	}
 	for(int i=0; i<la_slice; i++)
 	{
-		float y1 = cos(da*i);
-		float r1 = sqrt(1-y1*y1);
-		float y2 = cos(da*(i+1));
-		float r2 = sqrt(1-y2*y2);
+		float theta1 = latitude(i), theta2 = latitude(i + 1);
+		float y1 = cos(theta1), r1 = sin(theta1);
+		float y2 = cos(theta2), r2 = sin(theta2);
 		for(int j=0; j<lo_slice; j++)
 		{
 			vec3 a(r1*cos(db*j), y1, r1*sin(db*j));
